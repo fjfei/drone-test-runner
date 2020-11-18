@@ -1,0 +1,16 @@
+kind: pipeline
+type: docker
+name: go-run-test
+
+steps:
+  # get tag
+  - name: tag
+    image: golang
+    network_mode: host
+    depends_on: [clone]
+    commands:
+      - echo $$KEY
+      - pwd
+      - ls
+      - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+      - ./app
