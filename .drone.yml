@@ -1,16 +1,37 @@
+# demo
 kind: pipeline
-type: docker
-name: go-run-test
+name: drone-go-demo
 
+# 指定编译平台
+platform:
+  os: linux
+  arch: amd64
+
+# 指定代码空间，git代码会被clone到指定的path
+workspace:
+  path: /srv/drone-demo
+
+# type: docker, k8s, ssh, exec
+type: docker
+# 流水线
 steps:
-  # get tag
-  - name: tag
-    image: golang
-    network_mode: host
-    depends_on: [clone]
+  - name: build
+    image: golang:latest
+    # pull: if-not-exists
+    # pull: true
+    environment:
+      GOPROXY: "https://goproxy.cn,direct"
+    # secrets: [key1, key2]
+    volumes:
+      - name: pkgdeps
+        path: /go/pkg
     commands:
-      - echo $$KEY
-      - pwd
-      - ls
-      - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
-      - ./app
+	  - pwd
+	  - ls
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -a -installsuffix cgo -o app .                  # 使用alpine务必要指定 GO_ENABLED=0
+	  - ./app
+volumes:                                                              # 挂载
+  - name: pkgdeps
+    host:
+      path: /tmp/pkg
+
