@@ -26,10 +26,10 @@ steps:
       - name: pkgdeps
         path: /go/pkg
     commands:
-	  - pwd
-	  - ls
+      # - pwd
+      #  - ls
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -a -installsuffix cgo -o app .                  # 使用alpine务必要指定 GO_ENABLED=0
-	  - ./app
+      # - ./app
 volumes:                                                              # 挂载
   - name: pkgdeps
     host:
