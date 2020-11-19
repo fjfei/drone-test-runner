@@ -29,7 +29,14 @@ steps:
       # - pwd
       #  - ls
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -a -installsuffix cgo -o app .                  # 使用alpine务必要指定 GO_ENABLED=0
-      # - ./app
+      - ./app
+
+trigger:                                                               # 触发条件，并关系
+  branch:                                                              # git 分支
+    - master
+  event:                                                               # 事件
+    - push
+
 volumes:                                                              # 挂载
   - name: pkgdeps
     host:
