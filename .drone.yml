@@ -42,3 +42,5 @@ volumes:                                                              # 挂载
     host:
       path: /tmp/pkg
 
+node:
+  runner: go-run
